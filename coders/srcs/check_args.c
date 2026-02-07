@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 12:58:16 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/01/30 17:20:56 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/07 01:02:33 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,3 +77,29 @@ int	check_args(int argc, const char *argv[])
 	}
 	return (0);
 }
+
+struct args	convert_args(int argc, const char *argv[])
+{
+	struct args	args_data;
+	int			i;
+	int			*fields[] = {
+		&args_data.num_coders,
+		&args_data.time_to_burnout,
+		&args_data.time_to_compile,
+		&args_data.time_to_debug,
+		&args_data.time_to_refactor,
+		&args_data.num_compiles,
+		&args_data.dongle_cooldown
+	};
+
+	i = 0;
+	while (i < 7 && i < argc)
+	{
+		*fields[i] = atoi(argv[i + 1]);
+		i++;
+	}
+
+	args_data.scheduler = (char *)argv[8];
+	return (args_data);
+}
+

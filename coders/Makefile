@@ -6,7 +6,7 @@
 #    By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/29 14:26:36 by tlaranje          #+#    #+#              #
-#    Updated: 2026/01/30 13:18:27 by tlaranje         ###   ########.fr        #
+#    Updated: 2026/02/06 16:39:25 by tlaranje         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,25 +14,25 @@
 NAME	:= codexion
 
 # === Flags ===
-CFLAGS	:= -Wall -Wextra -Werror
+CFLAGS	:= -Wall -Wextra -Werror -Iincludes -lpthread
 
 # === Source files ===
-SRC		:= main.c check_args.c
+SRC_DIR	:= srcs
+SRC		:= $(shell find $(SRC_DIR) -name "*.c")
 
 # === Object files ===
 OBJ_DIR	:= objs
-OBJ		:= $(SRC:%.c=$(OBJ_DIR)/%.o)
+OBJ		:= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 # === Build targets ===
 all: $(NAME)
 
-$(OBJ_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(OBJ_DIR)
 	cc $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ)
 	cc $(CFLAGS) $(OBJ) -o $(NAME)
-
 
 clean:
 	rm -rf $(OBJ_DIR)
@@ -40,6 +40,6 @@ clean:
 fclean: clean
 	rm $(NAME)
 
-re: fclean all
+re: clean all
 
 .PHONY: all clean fclean re
