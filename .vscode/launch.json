@@ -1,0 +1,16 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Run Codexion (Makefile)",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/coders/codexion",
+			"args": ["3", "5000", "4000", "3000", "2000", "1", "10", "fifo"],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}",
+			"preLaunchTask": "build with make",
+			"MIMode": "gdb"
+		}
+	]
+}
