@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 12:58:16 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/09 16:36:43 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/10 11:35:06 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	is_uint(int index, const char *str)
 	return (1);
 }
 
-static int is_valid_scheduler(const char *s)
+static int	is_valid_scheduler(const char *s)
 {
 	return (strcmp(s, "fifo") == 0 || strcmp(s, "edf") == 0);
 }
@@ -76,20 +76,4 @@ int	check_args(int argc, const char *argv[])
 		i++;
 	}
 	return (0);
-}
-
-t_config	parse_args(const char *argv[])
-{
-	t_config	args_data;
-
-	args_data.num_of_coders = atoi(argv[1]);
-	args_data.time_to_burnout = atoi(argv[2]);
-	args_data.time_to_compile = atoi(argv[3]);
-	args_data.time_to_debug = atoi(argv[4]);
-	args_data.time_to_refactor = atoi(argv[5]);
-	args_data.num_compiles = atoi(argv[6]);
-	args_data.dongle_cooldown = atoi(argv[7]);
-	args_data.scheduler = (char *)argv[8];
-
-	return (args_data);
 }
