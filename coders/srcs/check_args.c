@@ -6,13 +6,13 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 12:58:16 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/10 11:35:06 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/11 17:19:37 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static int	is_uint(int index, const char *str)
+static int	is_uint(const char *str)
 {
 	int	i;
 
@@ -25,8 +25,8 @@ static int	is_uint(int index, const char *str)
 			return (0);
 		i++;
 	}
-	if (index != 7 && atoi(str) == 0)
-		return (0);
+	/* if (index != 7 && atoi(str) == 0)
+		return (0); */
 	return (1);
 }
 
@@ -60,7 +60,7 @@ int	check_args(int argc, const char *argv[])
 	{
 		if (i < 8)
 		{
-			if (!is_uint(i, argv[i]))
+			if (!is_uint(argv[i]))
 			{
 				fprintf(stderr,
 					"Error: Argument %d is invalid: '%s'\nArgument need to be "
