@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 16:49:30 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/11 17:08:15 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/16 16:47:13 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	init_coder_dongle(t_data *d)
 		d->coders[i].id = i + 1;
 		d->dongles[i].id = i + 1;
 		d->dongles[i].cooldown = d->config->dongle_cooldown;
-		d->dongles[i].is_in_use = false;
+		d->dongles[i].in_use = false;
 		d->coders[i].left_dongle = &d->dongles[i];
 		next = (i + 1) % d->config->num_coders;
 		d->coders[i].right_dongle = &d->dongles[next];
@@ -36,6 +36,7 @@ int	init_coder_dongle(t_data *d)
 
 int	init_monitor_mutexes(t_monitor *m)
 {
+	pthread_mutex_init(&m->heap_mutex, NULL);
 	pthread_mutex_init(&m->mutex, NULL);
 	pthread_mutex_init(&m->log_mutex, NULL);
 	pthread_mutex_init(&m->dongle_mutex, NULL);

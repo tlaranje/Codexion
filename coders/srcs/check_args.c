@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 12:58:16 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/11 17:19:37 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/16 15:20:14 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ static int	is_uint(const char *str)
 			return (0);
 		i++;
 	}
-	/* if (index != 7 && atoi(str) == 0)
-		return (0); */
 	return (1);
 }
 

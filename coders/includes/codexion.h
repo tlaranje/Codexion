@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 14:49:00 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/11 17:12:32 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/16 16:48:26 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,35 @@
 # include <stdint.h>
 # include <stdbool.h>
 
+// Macros
+#define MAX_CODERS 200
+
 // Structs
+typedef struct s_dongle
+{
+	uint32_t		id;
+	uint32_t		cooldown;
+	bool			in_use;
+}	t_dongle;
+
+typedef struct s_coder
+{
+	uint32_t		id;
+	pthread_t		thread;
+	t_dongle		*left_dongle;
+	t_dongle		*right_dongle;
+	uint64_t		last_compile_start;
+	uint32_t		compile_count;
+	uint64_t		deadline;
+	uint32_t		arrival_order;
+}	t_coder;
+
+typedef struct s_heap
+{
+	t_coder *data[MAX_CODERS];
+	int size;
+}	t_heap;
+
 typedef struct s_config
 {
 	uint32_t	num_coders;
@@ -35,26 +63,11 @@ typedef struct s_config
 	char		*scheduler;
 }	t_config;
 
-typedef struct s_dongle
-{
-	uint32_t		id;
-	uint32_t		cooldown;
-	bool			is_in_use;
-}	t_dongle;
-
-typedef struct s_coder
-{
-	uint32_t		id;
-	pthread_t		thread;
-	t_dongle		*left_dongle;
-	t_dongle		*right_dongle;
-	uint64_t		last_compile_start;
-	uint32_t		compile_count;
-}	t_coder;
-
 typedef struct s_monitor
 {
+	t_heap			wait_heap;
 	pthread_mutex_t	dongle_mutex;
+	pthread_mutex_t	heap_mutex;
 	pthread_mutex_t	log_mutex;
 	pthread_mutex_t	mutex;
 	pthread_cond_t	dongle_cond;
@@ -109,5 +122,13 @@ int			init_monitor_mutexes(t_monitor *m);
 // utils.c
 int			free_all(t_data *d);
 int			malloc_structs(t_data *data, int argc, const char *argv[]);
+
+// dongle_scheduler.c
+void		add_to_wait_queue(t_thread_args *ta);
+
+// heap.c
+int			heap_push(t_heap *h, t_coder *c, const char *mode);
+t_coder		*heap_pop(t_heap *h, const char *mode);
+t_coder		*heap_peek(t_heap *h);
 
 #endif

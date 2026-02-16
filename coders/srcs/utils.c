@@ -6,21 +6,24 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 10:19:28 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/11 16:52:21 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/16 14:10:12 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int	malloc_structs(t_data *data, int argc, const char *argv[])
+int	malloc_structs(t_data *d, int argc, const char *argv[])
 {
-	data->config = malloc(sizeof(t_config));
-	if (init_config(data->config, argc, argv) != 0)
+	uint32_t	num_coders;
+
+	d->config = malloc(sizeof(t_config));
+	if (init_config(d->config, argc, argv) != 0)
 		return (-1);
-	data->monitor = malloc(sizeof(t_monitor));
-	data->coders = malloc(sizeof(t_coder) * data->config->num_coders);
-	data->dongles = malloc(sizeof(t_dongle) * data->config->num_coders);
-	data->args = malloc(sizeof(t_thread_args) * data->config->num_coders);
+	num_coders = d->config->num_coders;
+	d->monitor = malloc(sizeof(t_monitor));
+	d->coders = malloc(sizeof(t_coder) * num_coders);
+	d->dongles = malloc(sizeof(t_dongle) * num_coders);
+	d->args = malloc(sizeof(t_thread_args) * num_coders);
 	return (0);
 }
 

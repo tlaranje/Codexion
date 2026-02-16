@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 11:29:58 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/11 17:12:10 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/16 17:08:45 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,17 @@ void	*coder_routime(void *arg)
 	ta = (t_thread_args *)arg;
 	while (!ta->monitor->stop)
 	{
-		take_two_dongles(ta->coder, ta->monitor);
 		pthread_mutex_lock(&ta->monitor->mutex);
 		ta->coder->last_compile_start = get_time_ms() - ta->monitor->start_time;
 		pthread_mutex_unlock(&ta->monitor->mutex);
+		add_to_wait_queue(ta);
+		take_two_dongles(ta->coder, ta->monitor);
 		do_action(ta, "compiling", ta->config->time_to_compile);
 		free_two_dongles(ta->coder, ta->monitor);
 		do_action(ta, "debugging", ta->config->time_to_debug);
 		do_action(ta, "refactoring", ta->config->time_to_refactor);
+		if (ta->coder->compile_count == ta->config->num_compiles)
+			ta->monitor->stop = true;
 	}
 	return (NULL);
 }
