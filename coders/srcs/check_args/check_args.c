@@ -6,32 +6,12 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 12:58:16 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/16 15:20:14 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/18 14:32:52 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
-
-static int	is_uint(const char *str)
-{
-	int	i;
-
-	if (!str || str[0] == '\0')
-		return (0);
-	i = 0;
-	while (str[i])
-	{
-		if (!(str[i] >= '0' && str[i] <= '9'))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-static int	is_valid_scheduler(const char *s)
-{
-	return (strcmp(s, "fifo") == 0 || strcmp(s, "edf") == 0);
-}
+#include "check_args.h"
+#include "utils.h"
 
 static int	check_mandatory_args(int argc)
 {

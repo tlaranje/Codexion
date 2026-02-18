@@ -6,11 +6,14 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 16:49:30 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/16 16:47:13 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/18 16:52:06 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "min_heap.h"
 #include "codexion.h"
+#include "check_args.h"
+#include "utils.h"
 
 int	init_coder_dongle(t_data *d)
 {
@@ -24,6 +27,10 @@ int	init_coder_dongle(t_data *d)
 		d->dongles[i].id = i + 1;
 		d->dongles[i].cooldown = d->config->dongle_cooldown;
 		d->dongles[i].in_use = false;
+		pthread_mutex_init(&d->coders[i].coder_mutex, NULL);
+		pthread_mutex_init(&d->dongles[i].dongle_mutex, NULL);
+		pthread_cond_init(&d->dongles[i].dongle_cond, NULL);
+		d->args[i].heap = d->heap;
 		d->coders[i].left_dongle = &d->dongles[i];
 		next = (i + 1) % d->config->num_coders;
 		d->coders[i].right_dongle = &d->dongles[next];
@@ -34,15 +41,14 @@ int	init_coder_dongle(t_data *d)
 	return (0);
 }
 
-int	init_monitor_mutexes(t_monitor *m)
+int	init_mutexes(t_data *d)
 {
-	pthread_mutex_init(&m->heap_mutex, NULL);
-	pthread_mutex_init(&m->mutex, NULL);
-	pthread_mutex_init(&m->log_mutex, NULL);
-	pthread_mutex_init(&m->dongle_mutex, NULL);
-	pthread_cond_init(&m->dongle_cond, NULL);
-	m->stop = false;
-	m->start_time = get_time_ms();
+	pthread_mutex_init(&d->heap->heap_mutex, NULL);
+	pthread_mutex_init(&d->monitor->monitor_mutex, NULL);
+	pthread_mutex_init(&d->monitor->log_mutex, NULL);
+	d->heap->size = 0;
+	d->monitor->stop = false;
+	d->monitor->start_time = get_time_ms();
 	return (0);
 }
 
@@ -52,6 +58,7 @@ int	init_thread_args(uint32_t i, t_data *d)
 	d->args[i].monitor = d->monitor;
 	d->args[i].coder = &d->coders[i];
 	d->args[i].dongle = &d->dongles[i];
+	d->monitor->wait_heap = malloc(sizeof(t_heap));
 	return (0);
 }
 

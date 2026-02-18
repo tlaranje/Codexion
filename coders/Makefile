@@ -6,7 +6,7 @@
 #    By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/29 14:26:36 by tlaranje          #+#    #+#              #
-#    Updated: 2026/02/11 17:14:35 by tlaranje         ###   ########.fr        #
+#    Updated: 2026/02/18 17:23:32 by tlaranje         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,8 @@ CFLAGS	:= -Wall -Wextra -Werror -g -Iincludes #-fsanitize=thread
 # === Source files ===
 SRC_DIR	:= srcs
 SRC		:= $(shell find $(SRC_DIR) -name "*.c")
+TEST_SRC := $(shell find tests -name "*.c")
+TEST_BIN := scheduler_test
 
 # === Object files ===
 OBJ_DIR	:= objs
@@ -28,7 +30,7 @@ OBJ		:= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 all: $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	mkdir -p $(OBJ_DIR)
+	mkdir -p $(dir $@)
 	cc $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ)
@@ -42,4 +44,4 @@ fclean: clean
 
 re: clean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re tests

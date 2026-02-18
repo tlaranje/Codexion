@@ -1,51 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   codexion.h                                         :+:      :+:    :+:   */
+/*   min_heap.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 14:49:00 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/18 14:55:13 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/18 14:06:16 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CODEXION_H
-# define CODEXION_H
+#ifndef MIN_HEAP_H
+# define MIN_HEAP_H
 
 // Includes
-# include <stdint.h>
+# include <pthread.h>
+#include "threads.h"
 
 // Forward declarations
-typedef struct s_config t_config;
-typedef struct s_data t_data;
-typedef struct s_monitor t_monitor;
-typedef struct s_coder t_coder;
-typedef struct s_dongle t_dongle;
-typedef struct s_thread_args t_thread_args;
 typedef struct s_heap t_heap;
+typedef struct s_coder t_coder;
+
+// Macros
+# define MAX_CODERS 200
 
 // Structs
-struct s_config
+struct s_heap
 {
-	uint32_t	num_coders;
-	uint64_t	time_to_burnout;
-	uint64_t	time_to_compile;
-	uint64_t	time_to_debug;
-	uint64_t	time_to_refactor;
-	uint64_t	num_compiles;
-	uint32_t	dongle_cooldown;
-	char		*scheduler;
+	pthread_mutex_t	heap_mutex;
+	t_coder	*data[MAX_CODERS];
+	int		size;
 };
 
-struct s_data
-{
-	t_config		*config;
-	t_monitor		*monitor;
-	t_coder			*coders;
-	t_dongle		*dongles;
-	t_heap			*heap;
-	t_thread_args	*args;
-};
+// heap_edf.c
+void	heapify_up_edf(t_heap *h, int i);
+void	heapify_down_edf(t_heap *h, int i);
+
+// heap_fifo.c
+void	heapify_up_fifo(t_heap *h, int i);
+void	heapify_down_fifo(t_heap *h, int i);
+
+// heap_utlis.c
+void	swap(t_coder **a, t_coder **b);
+int		heap_push(t_heap *h, t_coder *c, const char *mode);
+t_coder	*heap_pop(t_heap *h, const char *mode);
+t_coder	*heap_peek(t_heap *h);
 
 #endif

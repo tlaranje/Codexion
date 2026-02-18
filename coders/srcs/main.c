@@ -6,19 +6,15 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 14:45:44 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/16 11:40:06 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/18 14:44:45 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "check_args.h"
 #include "codexion.h"
-
-uint64_t	get_time_ms(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-}
+#include "min_heap.h"
+#include "threads.h"
+#include "utils.h"
 
 int	main(int argc, const char *argv[])
 {
@@ -26,8 +22,9 @@ int	main(int argc, const char *argv[])
 
 	if (check_args(argc, argv) == 0)
 	{
-		malloc_structs(&d, argc, argv);
-		init_monitor_mutexes(d.monitor);
+		if (malloc_structs(&d, argc, argv) != 0)
+			return (1);
+		init_mutexes(&d);
 		d.monitor->config = d.config;
 		d.monitor->start_time = get_time_ms();
 		init_coder_dongle(&d);
@@ -39,7 +36,6 @@ int	main(int argc, const char *argv[])
 			return (0);
 		}
 		d.monitor->coders = d.coders;
-		pthread_create(&d.monitor->thread, NULL, monitor_routime, &d);
 		start_threads(&d);
 		join_threads(&d);
 		free_all(&d);

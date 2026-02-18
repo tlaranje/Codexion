@@ -1,51 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   codexion.h                                         :+:      :+:    :+:   */
+/*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 14:49:00 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/18 14:55:13 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/18 14:33:42 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CODEXION_H
-# define CODEXION_H
+#ifndef UTILS_H
+# define UTILS_H
 
 // Includes
 # include <stdint.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <string.h>
 
 // Forward declarations
-typedef struct s_config t_config;
-typedef struct s_data t_data;
-typedef struct s_monitor t_monitor;
-typedef struct s_coder t_coder;
-typedef struct s_dongle t_dongle;
 typedef struct s_thread_args t_thread_args;
-typedef struct s_heap t_heap;
+typedef struct s_data t_data;
+typedef struct s_config t_config;
 
-// Structs
-struct s_config
-{
-	uint32_t	num_coders;
-	uint64_t	time_to_burnout;
-	uint64_t	time_to_compile;
-	uint64_t	time_to_debug;
-	uint64_t	time_to_refactor;
-	uint64_t	num_compiles;
-	uint32_t	dongle_cooldown;
-	char		*scheduler;
-};
+// init_utils.c
+int			init_coder_dongle(t_data *d);
+int			init_mutexes(t_data *d);
+int			init_thread_args(uint32_t i, t_data *d);
+int			init_config(t_config *config, int argc, const char *argv[]);
 
-struct s_data
-{
-	t_config		*config;
-	t_monitor		*monitor;
-	t_coder			*coders;
-	t_dongle		*dongles;
-	t_heap			*heap;
-	t_thread_args	*args;
-};
+// utils.c
+int			malloc_structs(t_data *d, int argc, const char *argv[]);
+int			free_all(t_data *d);
+void		print_wait_queue(t_thread_args *ta);
+uint64_t	get_time_ms(void);
 
 #endif
