@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:03:28 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/18 17:12:36 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/18 17:37:58 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "threads.h"
 #include "codexion.h"
 #include "utils.h"
+#include <stdio.h>
 
 void	add_to_wait_queue(t_thread_args *ta)
 {

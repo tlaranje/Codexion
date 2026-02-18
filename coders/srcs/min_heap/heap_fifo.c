@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 10:58:11 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/18 14:06:36 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/18 17:39:59 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,3 @@ void	heapify_down_fifo(t_heap *h, int i)
 		i = smallest;
 	}
 }
-
