@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:03:28 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/18 14:34:04 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/20 16:29:27 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,38 +23,60 @@ void	swap(t_coder **a, t_coder **b)
 	*b = tmp;
 }
 
-int	heap_push(t_heap *h, t_coder *c, const char *mode)
+int	heap_push(t_thread_args *ta, const char *mode)
 {
-	if (h->size >= MAX_CODERS)
-		return (-1);
-	h->data[h->size] = c;
-	if (strcmp(mode, "fifo") == 0)
-		heapify_up_fifo(h, h->size);
-	else if (strcmp(mode, "edf") == 0)
-		heapify_up_edf(h, h->size);
-	h->size++;
-	return (0);
+	t_heap	*heap;
+
+	heap = ta->monitor->wait_heap;
+	pthread_mutex_lock(&heap->heap_mutex);
+	if (heap->size < MAX_CODERS)
+	{
+		heap->data[heap->size] = ta->coder;
+		if (strcmp(mode, "fifo") == 0)
+			heapify_up_fifo(heap, heap->size);
+		else if (strcmp(mode, "edf") == 0)
+			heapify_up_edf(heap, heap->size);
+		heap->size++;
+		pthread_mutex_unlock(&heap->heap_mutex);
+		return (0);
+	}
+	pthread_mutex_unlock(&heap->heap_mutex);
+	return (-1);
 }
 
-t_coder	*heap_pop(t_heap *h, const char *mode)
+t_coder	*heap_pop(t_thread_args *ta, const char *mode)
 {
+	t_heap	*heap;
 	t_coder	*top;
 
-	if (h->size == 0)
-		return (NULL);
-	top = h->data[0];
-	h->data[0] = h->data[h->size - 1];
-	h->size--;
-	if (strcmp(mode, "fifo") == 0)
-		heapify_down_fifo(h, 0);
-	else if (strcmp(mode, "edf") == 0)
-		heapify_down_edf(h, 0);
+	heap = ta->monitor->wait_heap;
+	top = NULL;
+	pthread_mutex_lock(&heap->heap_mutex);
+	if (heap->size > 0)
+	{
+		top = heap->data[0];
+		heap->data[0] = heap->data[heap->size - 1];
+		heap->size--;
+		if (strcmp(mode, "fifo") == 0)
+			heapify_down_fifo(heap, 0);
+		else if (strcmp(mode, "edf") == 0)
+			heapify_down_edf(heap, 0);
+	}
+	pthread_mutex_unlock(&heap->heap_mutex);
 	return (top);
 }
 
-t_coder	*heap_peek(t_heap *h)
+
+t_coder	*heap_peek(t_thread_args *ta)
 {
-	if (h->size == 0)
-		return (NULL);
-	return (h->data[0]);
+	t_heap	*heap;
+	t_coder	*top;
+
+	heap = ta->monitor->wait_heap;
+	top = NULL;
+	pthread_mutex_lock(&heap->heap_mutex);
+	if (heap->size > 0)
+		top = heap->data[0];
+	pthread_mutex_unlock(&heap->heap_mutex);
+	return (top);
 }

@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 16:49:30 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/18 16:52:06 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/20 16:32:57 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int	init_thread_args(uint32_t i, t_data *d)
 	d->args[i].monitor = d->monitor;
 	d->args[i].coder = &d->coders[i];
 	d->args[i].dongle = &d->dongles[i];
-	d->monitor->wait_heap = malloc(sizeof(t_heap));
 	return (0);
 }
 

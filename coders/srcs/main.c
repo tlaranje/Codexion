@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 14:45:44 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/18 17:42:45 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/20 16:35:04 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	main(int argc, const char *argv[])
 			return (0);
 		}
 		d.monitor->coders = d.coders;
+		d.monitor->wait_heap = malloc(sizeof(t_heap));
+		d.monitor->wait_heap->size = 0;
 		start_threads(&d);
 		join_threads(&d);
 		free_all(&d);

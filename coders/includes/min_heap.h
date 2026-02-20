@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 14:49:00 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/18 14:06:16 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/20 16:11:44 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void	heapify_down_fifo(t_heap *h, int i);
 
 // heap_utlis.c
 void	swap(t_coder **a, t_coder **b);
-int		heap_push(t_heap *h, t_coder *c, const char *mode);
-t_coder	*heap_pop(t_heap *h, const char *mode);
-t_coder	*heap_peek(t_heap *h);
+int		heap_push(t_thread_args *ta, const char *mode);
+t_coder	*heap_pop(t_thread_args *ta, const char *mode);
+t_coder	*heap_peek(t_thread_args *ta);
 
 #endif
