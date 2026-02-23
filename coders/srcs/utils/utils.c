@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 10:19:28 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/20 16:37:32 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/23 16:43:13 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,10 @@ int	free_all(t_data *d)
 	free(d->coders);
 	free(d->dongles);
 	free(d->args);
+	free(d->monitor->wait_heap);
 	free(d->monitor);
 	free(d->config);
+	free(d->heap);
 	return (0);
 }
 
@@ -62,4 +64,15 @@ uint64_t	get_time_ms(void)
 
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+}
+
+void	set_timespec_delay(struct timespec *ts, uint64_t delay_ms)
+{
+	struct timeval	tv;
+	uint64_t		ns;
+
+	gettimeofday(&tv, NULL);
+	ns = tv.tv_usec * 1000 + (delay_ms % 1000) * 1000000;
+	ts->tv_sec = tv.tv_sec + (delay_ms / 1000) + (ns / 1000000000);
+	ts->tv_nsec = ns % 1000000000;
 }

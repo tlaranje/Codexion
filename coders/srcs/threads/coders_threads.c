@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:03:28 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/20 16:50:00 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/23 17:09:20 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,27 @@ void	add_to_wait_queue(t_thread_args *ta)
 	pthread_mutex_unlock(&ta->coder->coder_mutex);
 }
 
+static void	do_action(t_thread_args *ta, const char *action, uint64_t duration)
+{
+	uint64_t	now;
+
+	now = get_time_ms() - ta->monitor->start_time;
+	if (strcmp(action, "compiling") == 0)
+	{
+		pthread_mutex_lock(&ta->coder->coder_mutex);
+		ta->coder->last_compile_start = get_time_ms() - ta->monitor->start_time;
+		pthread_mutex_unlock(&ta->coder->coder_mutex);
+		ta->coder->compile_count++;
+	}
+	pthread_mutex_lock(&ta->monitor->monitor_mutex);
+	pthread_mutex_lock(&ta->monitor->log_mutex);
+	if (!ta->monitor->stop)
+		printf("%lu %d is %s\n", now, ta->coder->id, action);
+	pthread_mutex_unlock(&ta->monitor->log_mutex);
+	pthread_mutex_unlock(&ta->monitor->monitor_mutex);
+	usleep(duration * 1000);
+}
+
 static void	do_coder_actions(t_thread_args *ta)
 {
 	add_to_wait_queue(ta);
@@ -40,7 +61,7 @@ static void	do_coder_actions(t_thread_args *ta)
 	do_action(ta, "refactoring", ta->config->time_to_refactor);
 }
 
-void	*coder_routime(void *arg)
+void	*coder_routine(void *arg)
 {
 	t_thread_args	*ta;
 	bool			stop;
@@ -53,10 +74,6 @@ void	*coder_routime(void *arg)
 		pthread_mutex_unlock(&ta->monitor->monitor_mutex);
 		if (stop)
 			break ;
-		pthread_mutex_lock(&ta->coder->coder_mutex);
-		ta->coder->last_compile_start = get_time_ms()
-			- ta->monitor->start_time;
-		pthread_mutex_unlock(&ta->coder->coder_mutex);
 		do_coder_actions(ta);
 		pthread_mutex_lock(&ta->monitor->monitor_mutex);
 		if (ta->coder->compile_count == ta->config->num_compiles)

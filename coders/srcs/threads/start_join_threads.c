@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:03:28 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/18 16:13:59 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/23 16:26:27 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	start_threads(t_data *d)
 	while (++i < d->config->num_coders)
 	{
 		init_thread_args(i, d);
-		pthread_create(&d->coders[i].thread, NULL, coder_routime, &d->args[i]);
+		pthread_create(&d->coders[i].thread, NULL, coder_routine, &d->args[i]);
 	}
-	pthread_create(&d->monitor->thread, NULL, monitor_routime, d);
+	pthread_create(&d->monitor->thread, NULL, monitor_routine, d);
 	usleep(1000);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 14:49:00 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/20 16:11:44 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/23 16:24:33 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 // Includes
 # include <pthread.h>
-#include "threads.h"
+# include "threads.h"
 
 // Forward declarations
-typedef struct s_heap t_heap;
-typedef struct s_coder t_coder;
+typedef struct s_heap	t_heap;
+typedef struct s_coder	t_coder;
 
 // Macros
 # define MAX_CODERS 200
@@ -28,8 +28,8 @@ typedef struct s_coder t_coder;
 struct s_heap
 {
 	pthread_mutex_t	heap_mutex;
-	t_coder	*data[MAX_CODERS];
-	int		size;
+	t_coder			*data[MAX_CODERS];
+	int				size;
 };
 
 // heap_edf.c
