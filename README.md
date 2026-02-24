@@ -22,7 +22,6 @@ The main objective of the project is to implement a correct and efficient thread
 
 The simulation ends when a coder burns out or when all required compile cycles are completed. This project focuses on concurrency, synchronization primitives, scheduling algorithms, and precise timing control using POSIX threads.
 
----
 
 ## Instructions
 
