@@ -46,7 +46,7 @@ ThreadSanitizer is enabled to detect data races.
 
 **Parameters (all times in milliseconds):**
 
-| Parameter        | Description                                        |
+| `Parameter`        | `Description`                                        |
 |:-----------------|:---------------------------------------------------|
 | num_coders       | Number of coder threads                            |
 | time_to_burnout  | Maximum time without compiling before burnout (ms) |
