@@ -44,21 +44,19 @@ ThreadSanitizer is enabled to detect data races.
 
 	./codexion <num_coders> <time_to_burnout> <time_to_compile> <time_to_debug> <time_to_refactor> <num_compiles> <dongle_cooldown> <scheduler>
 
-
-Parameters:
+**Parameters (all times in milliseconds):**
 
 | Parameter        | Description                                        |
 |:-----------------|:---------------------------------------------------|
-| num_coders       | Number of coder threads                            |
-| time_to_burnout  | Maximum time without compiling before burnout (ms) |
-| time_to_compile  | Duration of compile phase (ms)                     |
-| time_to_debug    | Duration of debug phase (ms)                       |
-| time_to_refactor | Duration of refactor phase (ms)                    |
-| num_dongles      | Number of shared dongles available                 |
-| cooldown_time    | Cooldown before requesting dongles again (ms)      |
-| fifo / edf       | Scheduling policy                                  |
+| `num_coders`       | Number of coder threads                            |
+| `time_to_burnout`  | Maximum time without compiling before burnout (ms) |
+| `time_to_compile`  | Duration of compile phase (ms)                     |
+| `time_to_debug`    | Duration of debug phase (ms)                       |
+| `time_to_refactor` | Duration of refactor phase (ms)                    |
+| `num_dongles`      | Number of shared dongles available                 |
+| `cooldown_time`    | Cooldown before requesting dongles again (ms)      |
+| `fifo / edf`       | Scheduling policy                                  |
 
-#### Usage
-Example:
+**Example:**
 
 	./codexion 3 1000 400 300 200 5 100 edf
