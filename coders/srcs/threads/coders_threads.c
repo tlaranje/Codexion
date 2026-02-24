@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:03:28 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/23 17:09:20 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/24 10:54:19 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ static void	do_action(t_thread_args *ta, const char *action, uint64_t duration)
 	{
 		pthread_mutex_lock(&ta->coder->coder_mutex);
 		ta->coder->last_compile_start = get_time_ms() - ta->monitor->start_time;
-		pthread_mutex_unlock(&ta->coder->coder_mutex);
 		ta->coder->compile_count++;
+		pthread_mutex_unlock(&ta->coder->coder_mutex);
 	}
 	pthread_mutex_lock(&ta->monitor->monitor_mutex);
 	pthread_mutex_lock(&ta->monitor->log_mutex);

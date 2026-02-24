@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 14:49:00 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/23 16:23:34 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/24 10:45:55 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 
 // Forward declarations
 typedef struct s_config			t_config;
-typedef struct s_data			t_data;
 typedef struct s_monitor		t_monitor;
 typedef struct s_coder			t_coder;
 typedef struct s_dongle			t_dongle;
