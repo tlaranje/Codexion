@@ -6,7 +6,7 @@
 #    By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/29 14:26:36 by tlaranje          #+#    #+#              #
-#    Updated: 2026/02/24 11:14:21 by tlaranje         ###   ########.fr        #
+#    Updated: 2026/02/25 15:35:22 by tlaranje         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 NAME	:= codexion
 
 # === Flags ===
-CFLAGS	:= -Wall -Wextra -Werror -g -Iincludes -fsanitize=thread
+CFLAGS	:= -Wall -Wextra -Werror -g -Iincludes -pthread #-fsanitize=thread
 
 # === Source files ===
 SRC_DIR	:= srcs

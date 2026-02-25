@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 10:58:11 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/18 17:39:59 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/25 11:52:58 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	heapify_up_fifo(t_heap *h, int i)
 {
 	int	parent;
 
+	pthread_mutex_lock(&h->heap_mutex);
 	while (i > 0)
 	{
 		parent = (i - 1) / 2;
@@ -26,6 +27,7 @@ void	heapify_up_fifo(t_heap *h, int i)
 		swap(&h->data[i], &h->data[parent]);
 		i = parent;
 	}
+	pthread_mutex_unlock(&h->heap_mutex);
 }
 
 void	heapify_down_fifo(t_heap *h, int i)
@@ -34,6 +36,7 @@ void	heapify_down_fifo(t_heap *h, int i)
 	int	right;
 	int	smallest;
 
+	pthread_mutex_lock(&h->heap_mutex);
 	while (1)
 	{
 		left = 2 * i + 1;
@@ -52,4 +55,5 @@ void	heapify_down_fifo(t_heap *h, int i)
 		swap(&h->data[i], &h->data[smallest]);
 		i = smallest;
 	}
+	pthread_mutex_unlock(&h->heap_mutex);
 }

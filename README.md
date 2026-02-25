@@ -39,10 +39,18 @@ This will generate the executable:
 ./codexion
 ```
 
+Note: To test data races, you can use ThreadSanitizer. Uncomment the flag in the Makefile:
+
+```bash
+CFLAGS := -Wall -Wextra -Werror -g -Iincludes -pthread -fsanitize=thread
+```
+
+Compile normally with make. During execution, ThreadSanitizer will detect any simultaneous unsynchronized access to shared variables.
+
 ### Execution
 
 ```bash
-./codexion <num_coders> <time_to_burnout> <time_to_compile> <time_to_debug> <time_to_refactor> <num_dongles> <cooldown_time> <fifo|edf>
+./codexion <num_coders> <time_to_burnout> <time_to_compile> <time_to_debug> <time_to_refactor> <num_compiles> <cooldown_time> <fifo|edf>
 ```
 
 **Parameters (all times in milliseconds):**
@@ -54,7 +62,7 @@ This will generate the executable:
 | time_to_compile | Duration of compile phase |
 | time_to_debug | Duration of debug phase |
 | time_to_refactor | Duration of refactor phase |
-| num_dongles | Number of shared dongles available |
+| num_compiles | Number of compile cycles each coder must complete |
 | cooldown_time | Cooldown before requesting dongles again |
 | fifo / edf | Scheduling policy |
 

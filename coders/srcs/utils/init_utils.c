@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 16:49:30 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/23 16:42:20 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/25 12:18:31 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	init_coder_dongle(t_data *d)
 		d->coders[i].right_dongle = &d->dongles[next];
 		d->coders[i].last_compile_start = 0;
 		d->coders[i].compile_count = 0;
+		d->coders[i].finished = false;
 		d->dongles[i].available_at = 0;
 		i++;
 	}

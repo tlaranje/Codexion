@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 14:49:00 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/23 16:24:33 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/25 15:13:54 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,9 @@ void	swap(t_coder **a, t_coder **b);
 int		heap_push(t_thread_args *ta, const char *mode);
 t_coder	*heap_pop(t_thread_args *ta, const char *mode);
 t_coder	*heap_peek(t_thread_args *ta);
+
+// test_edf.c
+void	t_heapify_up_edf(t_heap *h, int i, int order);
+void	t_heapify_down_edf(t_heap *h, int i, int order);
 
 #endif

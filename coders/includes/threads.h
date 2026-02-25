@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 14:49:00 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/23 16:25:36 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/02/25 12:17:46 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ struct s_coder
 	uint32_t		compile_count;
 	uint64_t		deadline;
 	uint32_t		arrival_order;
+	bool			finished;
 };
 
 struct s_monitor
