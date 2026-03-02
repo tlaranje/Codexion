@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 16:49:30 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/03/02 10:34:01 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/02 23:58:17 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,10 @@ int	init_config(t_config *config, int argc, const char *argv[])
 	config->num_compiles = atoi(argv[6]);
 	config->dongle_cooldown = atoi(argv[7]);
 	config->scheduler = (char *)argv[8];
+	if (config->num_coders <= 0)
+	{
+		fprintf(stderr, "Error: Number of coders must be greater than 0.\n");
+		return (-1);
+	}
 	return (0);
 }

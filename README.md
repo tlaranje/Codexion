@@ -22,55 +22,75 @@ The main objective of the project is to implement a correct and efficient thread
 
 The simulation ends when a coder burns out or when all required compile cycles are completed. This project focuses on concurrency, synchronization primitives, scheduling algorithms, and precise timing control using POSIX threads.
 
+# Instructions
 
-## Instructions
-
-### Compilation
+## Compilation
 
 Compile the project using:
 
-```bash
-make
-```
+    make
 
 This will generate the executable:
 
-```bash
-./codexion
-```
+    ./codexion
 
-Note: To test data races, you can use ThreadSanitizer. Uncomment the flag in the Makefile:
 
-```bash
-CFLAGS := -Wall -Wextra -Werror -g -Iincludes -pthread -fsanitize=thread
-```
+## Execution of the Program
 
-Compile normally with make. During execution, ThreadSanitizer will detect any simultaneous unsynchronized access to shared variables.
+Run the program normally:
 
-### Execution
+    ./codexion <num_coders> <time_to_burnout> <time_to_compile> <time_to_debug> <time_to_refactor> <num_compiles> <cooldown_time> <fifo|edf>
 
-```bash
-./codexion <num_coders> <time_to_burnout> <time_to_compile> <time_to_debug> <time_to_refactor> <num_compiles> <cooldown_time> <fifo|edf>
-```
+### Parameters (all times in milliseconds):
 
-**Parameters (all times in milliseconds):**
+| Parameter         | Description                                           |
+|------------------|-------------------------------------------------------|
+| num_coders        | Number of coder threads                                |
+| time_to_burnout   | Maximum time without compiling before burnout         |
+| time_to_compile   | Duration of the compile phase                          |
+| time_to_debug     | Duration of the debug phase                             |
+| time_to_refactor  | Duration of the refactor phase                          |
+| num_compiles      | Number of compile cycles each coder must complete     |
+| cooldown_time     | Cooldown before requesting dongles again               |
+| fifo / edf        | Scheduling policy (FIFO or EDF)                        |
 
-| Parameter | Description |
-|:---|:---|
-| num_coders | Number of coder threads |
-| time_to_burnout | Maximum time without compiling before burnout |
-| time_to_compile | Duration of compile phase |
-| time_to_debug | Duration of debug phase |
-| time_to_refactor | Duration of refactor phase |
-| num_compiles | Number of compile cycles each coder must complete |
-| cooldown_time | Cooldown before requesting dongles again |
-| fifo / edf | Scheduling policy |
+### Example:
 
-**Example:**
+    ./codexion 3 1500 400 300 200 5 100 edf
 
-```bash
-./codexion 3 1500 400 300 200 5 100 edf
-```
+
+## Testing the Program with Valgrind
+
+### Checking for Data Races (Helgrind)
+
+To detect **data races** in your program that uses threads (`pthread`), use **Helgrind**, a Valgrind tool for concurrency errors.
+
+**Command:**
+
+    valgrind --tool=helgrind ./codexion <num_coders> <time_to_burnout> <time_to_compile> <time_to_debug> <time_to_refactor> <num_compiles> <cooldown_time> <fifo|edf>
+
+**Notes:**
+
+- Helgrind will check for **unsynchronized access to shared variables**.
+- Suppressed errors from system libraries are normal and can be ignored.
+
+---
+
+### Checking for Memory Leaks (Memcheck)
+
+To detect **memory leaks** and other memory issues, use **Memcheck**, Valgrind's default tool.
+
+**Command:**
+
+    valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all ./codexion <num_coders> <time_to_burnout> <time_to_compile> <time_to_debug> <time_to_refactor> <num_compiles> <cooldown_time> <fifo|edf>
+
+**Notes:**
+
+- Memcheck detects all types of leaks (definite, indirect, possible).
+- It also reports other memory problems, such as:
+  - Use-after-free
+  - Invalid read/write
+  - Double free
 
 ## Blocking Cases Handled
 

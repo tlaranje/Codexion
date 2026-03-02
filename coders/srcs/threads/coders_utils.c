@@ -25,7 +25,7 @@ static int	wait_dongle_cooldown(t_thread_args *ta, t_dongle *d)
 	while (d->available_at > now)
 	{
 		wait_ms = d->available_at - now;
-		set_timespec_delay(&ts, wait_ms);
+		set_timespec_delay(&ts, wait_ms + 1);
 		pthread_mutex_lock(&ta->monitor->monitor_mutex);
 		if (ta->monitor->stop)
 		{

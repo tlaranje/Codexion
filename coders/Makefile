@@ -14,7 +14,7 @@
 NAME	:= codexion
 
 # === Flags ===
-CFLAGS	:= -Wall -Wextra -Werror -g -Iincludes -pthread -fsanitize=thread
+CFLAGS	:= -Wall -Wextra -Werror -g -Iincludes -pthread
 
 # === Source files ===
 SRC_DIR	:= srcs

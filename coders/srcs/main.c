@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 14:45:44 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/03/02 10:33:08 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/02 23:54:59 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int argc, const char *argv[])
 		d.monitor->config = d.config;
 		d.monitor->start_time = get_time_ms();
 		init_coder_dongle(&d);
-		if (d.config->num_coders <= 1 || d.config->time_to_burnout == 0)
+		if (d.config->num_coders == 1 || d.config->time_to_burnout == 0)
 		{
 			usleep(d.config->time_to_burnout * 1000);
 			printf("%lu %d burned out\n",
