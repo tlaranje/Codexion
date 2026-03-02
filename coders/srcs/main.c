@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 14:45:44 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/25 15:33:11 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/02 10:33:08 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	main(int argc, const char *argv[])
 	{
 		if (malloc_structs(&d, argc, argv) != 0)
 			return (1);
+		d.monitor->wait_heap = malloc(sizeof(t_heap));
 		init_mutexes(&d);
 		d.monitor->config = d.config;
 		d.monitor->start_time = get_time_ms();
@@ -36,7 +37,6 @@ int	main(int argc, const char *argv[])
 			return (0);
 		}
 		d.monitor->coders = d.coders;
-		d.monitor->wait_heap = malloc(sizeof(t_heap));
 		d.monitor->wait_heap->size = 0;
 		start_threads(&d);
 		join_threads(&d);

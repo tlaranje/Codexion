@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 16:49:30 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/25 12:18:31 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/02 10:34:01 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	init_mutexes(t_data *d)
 	pthread_mutex_init(&d->heap->heap_mutex, NULL);
 	pthread_mutex_init(&d->monitor->monitor_mutex, NULL);
 	pthread_mutex_init(&d->monitor->log_mutex, NULL);
+	pthread_mutex_init(&d->monitor->wait_heap->heap_mutex, NULL);
 	d->heap->size = 0;
 	d->monitor->stop = false;
 	d->monitor->start_time = get_time_ms();
