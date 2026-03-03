@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 16:49:30 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/03/02 23:58:17 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/03 11:50:36 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,11 @@ int	init_config(t_config *config, int argc, const char *argv[])
 	if (config->num_coders <= 0)
 	{
 		fprintf(stderr, "Error: Number of coders must be greater than 0.\n");
+		return (-1);
+	}
+	else if (config->num_compiles <= 0)
+	{
+		fprintf(stderr, "Error: Number of compiles must be greater than 0.\n");
 		return (-1);
 	}
 	return (0);

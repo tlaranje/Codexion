@@ -61,21 +61,6 @@ Run the program normally:
 
 ## Testing the Program with Valgrind
 
-### Checking for Data Races (Helgrind)
-
-To detect **data races** in your program that uses threads (`pthread`), use **Helgrind**, a Valgrind tool for concurrency errors.
-
-**Command:**
-
-    valgrind --tool=helgrind ./codexion <num_coders> <time_to_burnout> <time_to_compile> <time_to_debug> <time_to_refactor> <num_compiles> <cooldown_time> <fifo|edf>
-
-**Notes:**
-
-- Helgrind will check for **unsynchronized access to shared variables**.
-- Suppressed errors from system libraries are normal and can be ignored.
-
----
-
 ### Checking for Memory Leaks (Memcheck)
 
 To detect **memory leaks** and other memory issues, use **Memcheck**, Valgrind's default tool.

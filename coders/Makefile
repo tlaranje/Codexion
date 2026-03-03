@@ -6,7 +6,7 @@
 #    By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/29 14:26:36 by tlaranje          #+#    #+#              #
-#    Updated: 2026/03/02 10:34:46 by tlaranje         ###   ########.fr        #
+#    Updated: 2026/03/03 11:54:33 by tlaranje         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,10 +14,10 @@
 NAME	:= codexion
 
 # === Flags ===
-CFLAGS	:= -Wall -Wextra -Werror -g -Iincludes -pthread
+CFLAGS	:= -Wall -Wextra -Werror -g -Iincludes -pthread -fsanitize=thread
 
 # === Source files ===
-SRC_DIR	:= srcs
+SRC_DIR	:= src
 SRC		:= $(shell find $(SRC_DIR) -name "*.c")
 
 # === Object files ===
