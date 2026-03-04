@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 16:49:30 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/03/03 11:50:36 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/04 17:06:23 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 int	init_coder_dongle(t_data *d)
 {
 	uint32_t	i;
-	uint32_t	next;
+	uint32_t	right;
 
 	i = 0;
 	while (i < d->config->num_coders)
@@ -32,8 +32,8 @@ int	init_coder_dongle(t_data *d)
 		pthread_cond_init(&d->dongles[i].dongle_cond, NULL);
 		d->args[i].heap = d->heap;
 		d->coders[i].left_dongle = &d->dongles[i];
-		next = (i + 1) % d->config->num_coders;
-		d->coders[i].right_dongle = &d->dongles[next];
+		right = (i + 1) % d->config->num_coders;
+		d->coders[i].right_dongle = &d->dongles[right];
 		d->coders[i].last_compile_start = 0;
 		d->coders[i].compile_count = 0;
 		d->coders[i].finished = false;
