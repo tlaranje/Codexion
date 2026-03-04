@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 11:29:58 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/03/04 16:48:20 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/04 17:21:38 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ static int	take_dongle(t_thread_args *ta, t_dongle *dongle)
 			pthread_cond_wait(&dongle->dongle_cond, &dongle->dongle_mutex);
 	}
 	dongle->in_use = true;
-	return (0);  // ✅ RETORNA COM MUTEX LOCKED
+	pthread_mutex_unlock(&dongle->dongle_mutex);
+	return (0);
 }
 
 static int	wait_and_take_dongles(t_thread_args *ta, t_coder *coder)
@@ -80,11 +81,10 @@ static int	wait_and_take_dongles(t_thread_args *ta, t_coder *coder)
 		return (-1);
 	if (take_dongle(ta, second) == -1)
 	{
-		// ✅ CORRIGIDO: Agora não tenta fazer lock em first
-		// Porque take_dongle() deixa o mutex locked
+		pthread_mutex_lock(&first->dongle_mutex);
 		first->in_use = false;
 		pthread_cond_broadcast(&first->dongle_cond);
-		pthread_mutex_unlock(&first->dongle_mutex);  // ← LIBERA O PRIMEIRO
+		pthread_mutex_unlock(&first->dongle_mutex);
 		return (-1);
 	}
 	return (0);
@@ -94,11 +94,6 @@ int	take_two_dongles(t_thread_args *ta, t_coder *coder)
 {
 	if (wait_and_take_dongles(ta, coder) == -1)
 		return (-1);
-
-	// ✅ LIBERA OS MUTEXES AQUI (após pegar ambos os dongles)
-	pthread_mutex_unlock(&coder->left_dongle->dongle_mutex);
-	pthread_mutex_unlock(&coder->right_dongle->dongle_mutex);
-
 	pthread_mutex_lock(&ta->monitor->monitor_mutex);
 	if (ta->monitor->stop)
 	{
