@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:03:28 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/03/05 15:37:35 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/05 17:36:38 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,13 @@ void	*coder_routine(void *arg)
 		if (stop)
 			break ;
 		do_coder_actions(ta);
-		pthread_mutex_lock(&ta->monitor->monitor_mutex);
-		if (ta->coder->compile_count == ta->config->num_compiles)
+		pthread_mutex_lock(&ta->coder->coder_mutex);
+		if (ta->coder->compile_count >= ta->config->num_compiles)
 		{
-			ta->monitor->stop = true;
-			pthread_mutex_unlock(&ta->monitor->monitor_mutex);
+			pthread_mutex_unlock(&ta->coder->coder_mutex);
 			break ;
 		}
-		pthread_mutex_unlock(&ta->monitor->monitor_mutex);
+		pthread_mutex_unlock(&ta->coder->coder_mutex);
 	}
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:03:28 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/03/05 13:47:15 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/05 17:36:14 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,24 @@ static int	find_next_burnout(t_data *d, uint64_t now)
 	return (-1);
 }
 
+static bool	all_coders_finished(t_data *d)
+{
+	uint32_t	i;
+	uint32_t	finished;
+
+	finished = 0;
+	i = 0;
+	while (i < d->config->num_coders)
+	{
+		pthread_mutex_lock(&d->coders[i].coder_mutex);
+		if (d->coders[i].compile_count >= d->config->num_compiles)
+			finished++;
+		pthread_mutex_unlock(&d->coders[i].coder_mutex);
+		i++;
+	}
+	return (finished == d->config->num_coders);
+}
+
 void	*monitor_routine(void *arg)
 {
 	t_data		*d;
@@ -79,6 +97,13 @@ void	*monitor_routine(void *arg)
 			return (NULL);
 		}
 		pthread_mutex_unlock(&d->monitor->monitor_mutex);
+		if (all_coders_finished(d))
+		{
+			pthread_mutex_lock(&d->monitor->monitor_mutex);
+			d->monitor->stop = true;
+			pthread_mutex_unlock(&d->monitor->monitor_mutex);
+			return (NULL);
+		}
 		now = get_time_ms() - d->monitor->start_time;
 		dead = find_next_burnout(d, now);
 		if (dead >= 0)
