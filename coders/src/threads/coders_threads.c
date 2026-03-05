@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:03:28 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/03/05 13:47:37 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/05 15:29:46 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@ static void	do_action(t_thread_args *ta, const char *action, uint64_t duration)
 	uint64_t	now;
 
 	now = get_time_ms() - ta->monitor->start_time;
+	pthread_mutex_lock(&ta->monitor->monitor_mutex);
+	pthread_mutex_lock(&ta->monitor->log_mutex);
+	printf("%lu %d is %s\n", now, ta->coder->id, action);
+	pthread_mutex_unlock(&ta->monitor->log_mutex);
+	pthread_mutex_unlock(&ta->monitor->monitor_mutex);
 	if (strcmp(action, "compiling") == 0)
 	{
 		pthread_mutex_lock(&ta->coder->coder_mutex);
@@ -42,22 +47,27 @@ static void	do_action(t_thread_args *ta, const char *action, uint64_t duration)
 		ta->coder->compile_count++;
 		pthread_mutex_unlock(&ta->coder->coder_mutex);
 	}
-	pthread_mutex_lock(&ta->monitor->monitor_mutex);
-	pthread_mutex_lock(&ta->monitor->log_mutex);
-	printf("%lu %d is %s\n", now, ta->coder->id, action);
-	pthread_mutex_unlock(&ta->monitor->log_mutex);
-	pthread_mutex_unlock(&ta->monitor->monitor_mutex);
 	usleep(duration * 1000);
 }
 
-static void	do_coder_actions(t_thread_args *ta)
+static bool	do_coder_actions(t_thread_args *ta)
 {
 	add_to_wait_queue(ta);
-	take_two_dongles(ta, ta->coder);
+	if (!ta->coder->finished)
+		take_two_dongles(ta, ta->coder);
 	do_action(ta, "compiling", ta->config->time_to_compile);
 	free_two_dongles(ta, ta->coder);
 	do_action(ta, "debugging", ta->config->time_to_debug);
 	do_action(ta, "refactoring", ta->config->time_to_refactor);
+	pthread_mutex_lock(&ta->coder->coder_mutex);
+	if (ta->coder->compile_count == ta->config->num_compiles)
+	{
+		ta->coder->finished = true;
+		pthread_mutex_unlock(&ta->coder->coder_mutex);
+		return (true);
+	}
+	pthread_mutex_unlock(&ta->coder->coder_mutex);
+	return (false);
 }
 
 void	*coder_routine(void *arg)
@@ -73,15 +83,8 @@ void	*coder_routine(void *arg)
 		pthread_mutex_unlock(&ta->monitor->monitor_mutex);
 		if (stop)
 			break ;
-		do_coder_actions(ta);
-		pthread_mutex_lock(&ta->monitor->monitor_mutex);
-		if (ta->coder->compile_count == ta->config->num_compiles)
-		{
-			ta->monitor->stop = true;
-			pthread_mutex_unlock(&ta->monitor->monitor_mutex);
+		if (do_coder_actions(ta) == true)
 			break ;
-		}
-		pthread_mutex_unlock(&ta->monitor->monitor_mutex);
 	}
 	return (NULL);
 }

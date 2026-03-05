@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 10:19:28 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/23 16:43:13 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/05 14:57:51 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,18 @@ int	malloc_structs(t_data *d, int argc, const char *argv[])
 
 int	free_all(t_data *d)
 {
+	uint32_t	i;
+
+	i = 0;
+	while (i < d->config->num_coders)
+	{
+		pthread_mutex_destroy(&d->dongles[i].dongle_mutex);
+		pthread_cond_destroy(&d->dongles[i].dongle_cond);
+		pthread_mutex_destroy(&d->coders[i].coder_mutex);
+		i++;
+	}
 	pthread_mutex_destroy(&d->monitor->monitor_mutex);
 	pthread_mutex_destroy(&d->monitor->log_mutex);
-	pthread_mutex_destroy(&d->dongles->dongle_mutex);
-	pthread_cond_destroy(&d->dongles->dongle_cond);
 	free(d->coders);
 	free(d->dongles);
 	free(d->args);
