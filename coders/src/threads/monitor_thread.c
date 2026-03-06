@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:03:28 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/03/05 17:36:14 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/06 10:38:44 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,26 @@
 #include "codexion.h"
 #include "utils.h"
 
-static void	wake_all_dongles(t_data *d)
+static bool	check_or_set_stop(t_monitor *monitor, bool set)
+{
+	bool	stop;
+
+	pthread_mutex_lock(&monitor->monitor_mutex);
+	if (set)
+		monitor->stop = true;
+	stop = monitor->stop;
+	pthread_mutex_unlock(&monitor->monitor_mutex);
+	return (stop);
+}
+
+static void	handle_dead(t_data *d, int dead, uint64_t now)
 {
 	uint32_t	i;
 
+	pthread_mutex_lock(&d->monitor->log_mutex);
+	printf("%lu %d burned out\n", now, d->coders[dead].id);
+	pthread_mutex_unlock(&d->monitor->log_mutex);
+	check_or_set_stop(d->monitor, true);
 	i = -1;
 	while (++i < d->config->num_coders)
 	{
@@ -26,17 +42,6 @@ static void	wake_all_dongles(t_data *d)
 		pthread_cond_broadcast(&d->dongles[i].dongle_cond);
 		pthread_mutex_unlock(&d->dongles[i].dongle_mutex);
 	}
-}
-
-static void	handle_dead(t_data *d, int dead, uint64_t now)
-{
-	pthread_mutex_lock(&d->monitor->log_mutex);
-	printf("%lu %d burned out\n", now, d->coders[dead].id);
-	pthread_mutex_unlock(&d->monitor->log_mutex);
-	pthread_mutex_lock(&d->monitor->monitor_mutex);
-	d->monitor->stop = true;
-	pthread_mutex_unlock(&d->monitor->monitor_mutex);
-	wake_all_dongles(d);
 }
 
 static int	find_next_burnout(t_data *d, uint64_t now)
@@ -49,11 +54,7 @@ static int	find_next_burnout(t_data *d, uint64_t now)
 	{
 		pthread_mutex_lock(&d->coders[i].coder_mutex);
 		if (!d->coders[i].compile_count)
-		{
-			pthread_mutex_unlock(&d->coders[i].coder_mutex);
-			i++;
-			continue ;
-		}
+			return (pthread_mutex_unlock(&d->coders[i].coder_mutex), i++, -1);
 		diff = now - d->coders[i].last_compile_start;
 		pthread_mutex_unlock(&d->coders[i].coder_mutex);
 		if (diff >= d->config->time_to_burnout)
@@ -90,27 +91,14 @@ void	*monitor_routine(void *arg)
 	d = (t_data *)arg;
 	while (1)
 	{
-		pthread_mutex_lock(&d->monitor->monitor_mutex);
-		if (d->monitor->stop)
-		{
-			pthread_mutex_unlock(&d->monitor->monitor_mutex);
+		if (check_or_set_stop(d->monitor, false))
 			return (NULL);
-		}
-		pthread_mutex_unlock(&d->monitor->monitor_mutex);
 		if (all_coders_finished(d))
-		{
-			pthread_mutex_lock(&d->monitor->monitor_mutex);
-			d->monitor->stop = true;
-			pthread_mutex_unlock(&d->monitor->monitor_mutex);
-			return (NULL);
-		}
+			return (check_or_set_stop(d->monitor, true), NULL);
 		now = get_time_ms() - d->monitor->start_time;
 		dead = find_next_burnout(d, now);
 		if (dead >= 0)
-		{
-			handle_dead(d, dead, now);
-			return (NULL);
-		}
+			return (handle_dead(d, dead, now), NULL);
 		usleep(1000);
 	}
 }

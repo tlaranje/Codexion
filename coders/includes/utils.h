@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 14:49:00 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/23 16:24:01 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/06 10:29:57 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int			init_coder_dongle(t_data *d);
 int			init_mutexes(t_data *d);
 int			init_thread_args(uint32_t i, t_data *d);
 int			init_config(t_config *config, int argc, const char *argv[]);
+int			init_monitor(t_data *d);
 
 // utils.c
 int			malloc_structs(t_data *d, int argc, const char *argv[]);

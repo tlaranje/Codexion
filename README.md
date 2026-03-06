@@ -67,7 +67,7 @@ To detect **memory leaks** and other memory issues, use **Memcheck**, Valgrind's
 
 **Command:**
 
-    valgrind --tool=memcheck --leak-check=ful ./codexion <num_coders> <time_to_burnout> <time_to_compile> <time_to_debug> <time_to_refactor> <num_compiles> <cooldown_time> <fifo|edf>
+    valgrind --tool=memcheck --leak-check=full ./codexion <num_coders> <time_to_burnout> <time_to_compile> <time_to_debug> <time_to_refactor> <num_compiles> <cooldown_time> <fifo|edf>
 
 **Notes:**
 

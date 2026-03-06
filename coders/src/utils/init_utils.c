@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 16:49:30 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/03/05 15:34:10 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/06 10:29:45 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,19 @@ int	init_config(t_config *config, int argc, const char *argv[])
 		fprintf(stderr, "Error: Number of compiles must be greater than 0.\n");
 		return (-1);
 	}
+	return (0);
+}
+
+int	init_monitor(t_data *d)
+{
+	d->monitor->wait_heap = malloc(sizeof(t_heap));
+	if (!d->monitor->wait_heap)
+		return (free_all(d), 1);
+	init_mutexes(d);
+	d->monitor->config = d->config;
+	d->monitor->start_time = get_time_ms();
+	d->monitor->coders = d->coders;
+	d->monitor->wait_heap->size = 0;
+	init_coder_dongle(d);
 	return (0);
 }

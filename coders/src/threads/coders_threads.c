@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:03:28 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/03/05 17:36:38 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/06 10:43:21 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ static void	do_action(t_thread_args *ta, const char *action, uint64_t duration)
 	}
 	pthread_mutex_lock(&ta->monitor->monitor_mutex);
 	pthread_mutex_lock(&ta->monitor->log_mutex);
-	printf("%lu %d is %s\n", now, ta->coder->id, action);
+	if (!ta->monitor->stop)
+		printf("%lu %d is %s\n", now, ta->coder->id, action);
 	pthread_mutex_unlock(&ta->monitor->log_mutex);
 	pthread_mutex_unlock(&ta->monitor->monitor_mutex);
 	usleep(duration * 1000);
