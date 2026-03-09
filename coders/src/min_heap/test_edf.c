@@ -6,7 +6,7 @@
 /*   By: tlaranje <tlaranje@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:08:07 by tlaranje          #+#    #+#             */
-/*   Updated: 2026/02/25 15:32:40 by tlaranje         ###   ########.fr       */
+/*   Updated: 2026/03/09 10:36:26 by tlaranje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,21 +68,23 @@ void	t_heapify_down_edf(t_heap *h, int i, int order)
 Add this to heapify_up_edf and  heapify_down_edf so that when the deadlines
 are the same for prioritize the coder with the highest ID
 ---
-static int	edf_cmp(t_coder *a, t_coder *b)
+static int	edf_cmp(t_coder *a, t_coder *b, int order)
 {
 	if (a->deadline != b->deadline)
 		return (a->deadline < b->deadline);
+	if (order == 0)
+		return (a->id < b->id);
 	return (a->id > b->id);
 }
 ---
 Chance the if of heapify_up_edf to
-if (!edf_cmp(h->data[i], h->data[parent]))
+if (!edf_cmp(h->data[i], h->data[parent], order))
 	break;
 
 Chance the ifs of heapify_down_edf to
-if (left < h->size && edf_cmp(h->data[left], h->data[smallest]))
+if (left < h->size && edf_cmp(h->data[left], h->data[small], order))
 	smallest = left;
 
-if (right < h->size && edf_cmp(h->data[right], h->data[smallest]))
+if (right < h->size && edf_cmp(h->data[right], h->data[small], order))
 	smallest = right;
 */
